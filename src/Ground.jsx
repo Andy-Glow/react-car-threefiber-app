@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { MeshReflectorMaterial } from "@react-three/drei";
 import { RepeatWrapping, TextureLoader, LinearFilter } from "three"; // Добавили LinearFilter
 
-export function Ground() {
+export function Ground({ resolution }) {
   const [roughness, normal] = useLoader(TextureLoader, [
     "/textures/terrain-roughness.jpg",
     "/textures/terrain-normal.jpg",
@@ -45,7 +45,7 @@ export function Ground() {
         mixBlur={30}
         mixStrength={80}
         mixContrast={1}
-        resolution={256} // НАША ОПТИМИЗАЦИЯ: снизили до 256 ради максимальной плавности
+        resolution={resolution} // <--- динамически (256, 512 или 1024)
         mirror={1}
         depthScale={0.01}
         minDepthThreshold={0.9}
