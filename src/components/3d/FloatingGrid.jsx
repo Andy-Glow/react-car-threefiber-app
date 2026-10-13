@@ -1,39 +1,39 @@
-// Добавили useFrame в импорт на первой строке
 import { useLoader, useFrame } from "@react-three/fiber";
 import { useEffect } from "react";
 import { RepeatWrapping, TextureLoader } from "three";
 
-export function FloatingGrid() {
+export function FloatingGrid({ quality }) {
   const diffuse = useLoader(TextureLoader, "/textures/grid-texture.png");
 
   useEffect(() => {
+    if (!diffuse) return;
     diffuse.wrapS = RepeatWrapping;
     diffuse.wrapT = RepeatWrapping;
-    diffuse.anisotropy = 4;
     diffuse.repeat.set(30, 30);
     diffuse.offset.set(0, 0);
-  }, [diffuse]);
 
-  // АНИМАЦИЯ ИЗ ВИДЕО (с исправлением опечатки автора):
+    // Анизотропия: 1 на low, 4 на mid, 16 на high
+    diffuse.anisotropy = quality === "low" ? 1 : quality === "mid" ? 4 : 16;
+  }, [diffuse, quality]);
+
   useFrame((state) => {
-    // Получаем чистое время работы сцены
     let t = -state.clock.getElapsedTime() * 0.68;
-    // Сдвигаем текстуру по оси Y (для плоскости это направление движения "вперед-назад")
     diffuse.offset.set(0, t);
   });
 
   return (
-    <>
-      <mesh rotation-x={-Math.PI * 0.5} position={[0, 0.425, 0]}>
-        <planeGeometry args={[35, 35]} />
-        <meshBasicMaterial
-          color={[1, 1, 1]}
-          opacity={0.15}
-          map={diffuse}
-          alphaMap={diffuse}
-          transparent={true}
-        />
-      </mesh>
-    </>
+    <mesh rotation-x={-Math.PI * 0.5} position={[0, 0.425, 0]}>
+      {/* ИСПРАВЛЕНИЕ: Поставили размеры плоскости 30 на 30 */}
+      <planeGeometry args={[30, 30]} />
+
+      <meshBasicMaterial
+        // ИСПРАВЛЕНИЕ: Поставили белый цвет RGB, чтобы текстура отображалась корректно
+        color={[1, 1, 1]}
+        opacity={0.15}
+        map={diffuse}
+        alphaMap={diffuse}
+        transparent={true}
+      />
+    </mesh>
   );
 }

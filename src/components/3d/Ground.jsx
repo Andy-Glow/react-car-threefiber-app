@@ -1,9 +1,15 @@
 import { useLoader, useFrame } from "@react-three/fiber";
 import { useEffect } from "react";
 import { MeshReflectorMaterial } from "@react-three/drei";
-import { RepeatWrapping, TextureLoader, LinearFilter } from "three"; // Добавили LinearFilter
+import {
+  RepeatWrapping,
+  TextureLoader,
+  LinearFilter,
+  NearestFilter,
+  LinearMipmapLinearFilter,
+} from "three"; // Добавили фильтры Three
 
-export function Ground({ resolution }) {
+export function Ground({ resolution, quality }) {
   const [roughness, normal] = useLoader(TextureLoader, [
     "/textures/terrain-roughness.jpg",
     "/textures/terrain-normal.jpg",
@@ -15,14 +21,25 @@ export function Ground({ resolution }) {
       t.wrapT = RepeatWrapping;
       t.repeat.set(5, 5);
 
-      // СВЕРХОПТИМИЗАЦИЯ ДЛЯ СТАРЫХ GPU:
-      // Отключаем построение мип-мапов и переводим в легкий режим фильтрации.
-      // Это убирает микроподёргивания при постоянном сдвиге офсета текстуры!
-      t.generateMipmaps = false;
-      t.minFilter = LinearFilter;
-      t.magFilter = LinearFilter;
+      // ДИНАМИЧЕСКОЕ УПРАВЛЕНИЕ ТЯЖЕСТЬЮ ТЕКСТУР:
+      if (quality === "low") {
+        t.generateMipmaps = false; // Отключаем дубликаты текстуры в памяти
+        t.minFilter = NearestFilter; // Аппаратно сбрасываем разрешение текстуры (Ультра-скорость)
+        t.magFilter = NearestFilter;
+        t.anisotropy = 1;
+      } else if (quality === "mid") {
+        t.generateMipmaps = true;
+        t.minFilter = LinearFilter; // Среднее сглаживание
+        t.magFilter = LinearFilter;
+        t.anisotropy = 4;
+      } else {
+        t.generateMipmaps = true;
+        t.minFilter = LinearMipmapLinearFilter; // Максимальное трилинейное сглаживание для ПК
+        t.magFilter = LinearFilter;
+        t.anisotropy = 16; // Ультра-четкость вдалеке
+      }
     });
-  }, [normal, roughness]);
+  }, [normal, roughness, quality]);
 
   useFrame((state) => {
     let t = -state.clock.getElapsedTime() * 0.128;
@@ -41,11 +58,11 @@ export function Ground({ resolution }) {
         dithered={true}
         color={[0.015, 0.015, 0.015]}
         roughness={0.7}
-        blur={[1000, 400]}
+        blur={[0, 0]}
         mixBlur={30}
         mixStrength={80}
         mixContrast={1}
-        resolution={resolution} // <--- динамически (256, 512 или 1024)
+        resolution={resolution}
         mirror={1}
         depthScale={0.01}
         minDepthThreshold={0.9}
