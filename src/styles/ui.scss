@@ -4,11 +4,11 @@
   left: 20px;
   z-index: 10;
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 12px;
   font-family: sans-serif;
 }
 
-/* Строка для кнопок графики, чтобы они стояли в один ряд, как и раньше */
 .quality-row {
   display: flex;
   gap: 10px;

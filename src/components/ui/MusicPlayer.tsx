@@ -1,22 +1,23 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef, ChangeEvent } from "react";
 
-export function MusicPlayer() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  // Стейт для громкости (от 0 до 1), по дефолту 0.4 (40%)
-  const [volume, setVolume] = useState(0.4);
-  const audioRef = useRef(null);
+export function MusicPlayer(): React.JSX.Element {
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [volume, setVolume] = useState<number>(0.4);
 
-  const toggleMusic = () => {
+  // ТИПИЗАЦИЯ REF: Указываем TypeScript, что внутри рефа лежит объект HTMLAudioElement (или null на старте)
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const toggleMusic = (): void => {
     if (!audioRef.current) {
       audioRef.current = new Audio("/audio/moon-chrome-auto.mp3");
       audioRef.current.loop = true;
-      audioRef.current.volume = volume; // Применяем текущую громкость при создании
+      audioRef.current.volume = volume;
     }
 
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play().catch((err) => {
+      audioRef.current.play().catch((err: unknown) => {
         console.log("Браузер заблокировал автовоспроизведение:", err);
       });
     }
@@ -24,8 +25,8 @@ export function MusicPlayer() {
     setIsPlaying(!isPlaying);
   };
 
-  // Функция изменения громкости на лету
-  const handleVolumeChange = (e) => {
+  // ТИПИЗАЦИЯ СОБЫТИЯ: Указываем ChangeEvent для ползунка громкости (HTMLInputElement)
+  const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
     if (audioRef.current) {
@@ -39,7 +40,6 @@ export function MusicPlayer() {
         {isPlaying ? "📻 Music: ON" : "🔇 Music: OFF"}
       </button>
 
-      {/* Ползунок громкости, который появляется только когда музыка играет */}
       {isPlaying && (
         <input
           type='range'

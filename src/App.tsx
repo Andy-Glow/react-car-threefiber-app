@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import React, { Suspense, useState, memo } from "react";
 import { Canvas } from "@react-three/fiber";
 import "./styles/index.scss";
 import { OrbitControls, PerspectiveCamera, CubeCamera, Environment } from "@react-three/drei";
@@ -12,32 +12,36 @@ import { FloatingGrid } from "./components/3d/FloatingGrid";
 import { Hotspots } from "./components/ui/Hotspots";
 import { MusicPlayer } from "./components/ui/MusicPlayer";
 
-function CarShow({ quality }) {
+// ИНТЕРФЕЙС ПРОПСОВ ДЛЯ СЦЕНЫ: Описываем входящие типы данных для мемоизированного компонента
+interface CarShowProps {
+  quality: string;
+  isHotspotsVisible: boolean;
+}
+
+// Мемоизированная 3D-сцена с явным указанием возвращаемого JSX-элемента
+const MemoizedCarShow = memo(function CarShow({
+  quality,
+  isHotspotsVisible,
+}: CarShowProps): React.JSX.Element {
   const isLow = quality === "low";
   const isMid = quality === "mid";
   const isHigh = quality === "high";
 
-  // МОБИЛЬНЫЙ ХАК: Проверяем, зашел ли пользователь с экрана телефона (меньше 768px)
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
-  // Динамическое разрешение пола:
-  // На ПК: low = 256, mid = 512, high = 1024
-  // На СМАРТФОНЕ: для MID снижаем разрешение до 256, чтобы не греть GPU, но сохраняем тени!
-  const groundResolution = isLow ? 256 : isMid ? (isMobile ? 256 : 512) : 1024;
-
-  const cubeCameraFrames = isHigh ? Infinity : 2;
-  const shadowMapSize = isMid ? 1024 : 2048;
+  // Разрешение зеркала пола адаптируется под ПК/Смартфон
+  const groundResolution: number = isLow ? 256 : isMid ? (isMobile ? 256 : 512) : 1024;
+  const cubeCameraFrames: number = isHigh ? Infinity : 2;
+  const shadowMapSize: number = isMid ? 1024 : 2048;
 
   return (
     <>
       <fog attach='fog' args={["#05050a", 6, 15]} />
 
       <OrbitControls target={[0, 0.35, 0]} maxPolarAngle={1.45} />
-      <PerspectiveCamera makeDefault fov={50} position={[8, 3.5, 8]} />
+      <PerspectiveCamera makeDefault fov={50} position={[5.6, 2.45, 5.6]} />
       <color args={["#05050a"]} attach='background' />
 
-      {/* На LOW полностью выключаем CubeCamera.
-          На MID на мобилках она сделает 2 легких снимка при загрузке и уснет */}
       {isLow ? (
         <>
           <Environment preset='night' />
@@ -57,13 +61,14 @@ function CarShow({ quality }) {
       <Rings quality={quality} />
       <Boxes />
       <FloatingGrid quality={quality} />
-      <Hotspots />
+
+      <Hotspots isVisible={isHotspotsVisible} />
 
       <ambientLight intensity={0.2} />
 
       <spotLight
         color={[1, 0.25, 0.7]}
-        intensity={380} // Усиленная яркость
+        intensity={380}
         angle={0.6}
         penumbra={0.5}
         position={[5, 5, 0]}
@@ -74,7 +79,7 @@ function CarShow({ quality }) {
 
       <spotLight
         color={[0.14, 0.5, 1]}
-        intensity={540} // Усиленная яркость
+        intensity={540}
         angle={0.6}
         penumbra={0.5}
         position={[-5, 5, 0]}
@@ -86,17 +91,17 @@ function CarShow({ quality }) {
       <Ground resolution={groundResolution} quality={quality} />
     </>
   );
-}
+});
 
-export default function App() {
-  const [quality, setQuality] = useState("low");
+export default function App(): React.JSX.Element {
+  // Явно типизируем стейты: качество (строка) и видимость точек (булево)
+  const [quality, setQuality] = useState<string>("low");
+  const [isHotspotsVisible, setIsHotspotsVisible] = useState<boolean>(true);
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
-  // УПРАВЛЕНИЕ РАЗРЕШЕНИЕМ ЭКРАНА (DPR):
-  // Если это мобилка, жестко держим dpr={1} на low/mid, чтобы не рендерить сцену в 4К разрешении экрана телефона.
-  // На ПК оставляем четкие [1, 1.5]
-  const dynamicDPR = isMobile
+  // ТИПИЗАЦИЯ DPR: Указываем тип, который принимает свойство dpr компонента Canvas
+  const dynamicDPR: [number, number] | number = isMobile
     ? quality === "high"
       ? [1, 1.2]
       : 1
@@ -117,6 +122,12 @@ export default function App() {
             </button>
           ))}
         </div>
+
+        <button
+          onClick={() => setIsHotspotsVisible(!isHotspotsVisible)}
+          className={`btn-toggle-hotspots ${!isHotspotsVisible ? "hidden-mode" : ""}`}>
+          {isHotspotsVisible ? "👁 Скрыть точки" : "👁 Показать точки"}
+        </button>
       </div>
 
       <MusicPlayer />
@@ -127,8 +138,8 @@ export default function App() {
             <div className='loader-text'>Загрузка текстур...</div>
           </div>
         }>
-        <Canvas shadows={quality !== "low"} gl={{ legacy: false }} dpr={dynamicDPR}>
-          <CarShow quality={quality} />
+        <Canvas shadows={quality !== "low"} dpr={dynamicDPR}>
+          <MemoizedCarShow quality={quality} isHotspotsVisible={isHotspotsVisible} />
         </Canvas>
       </Suspense>
     </div>
