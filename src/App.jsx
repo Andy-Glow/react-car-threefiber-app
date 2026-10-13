@@ -23,7 +23,7 @@ function CarShow({ quality }) {
   return (
     <>
       <OrbitControls target={[0, 0.35, 0]} maxPolarAngle={1.45} />
-      <PerspectiveCamera makeDefault fov={50} position={[3, 2, 5]} />
+      <PerspectiveCamera makeDefault fov={50} position={[5, 2, 5]} />
       <color args={[0, 0, 0]} attach='background' />
 
       <CubeCamera resolution={128} frames={cubeCameraFrames}>
@@ -38,13 +38,15 @@ function CarShow({ quality }) {
       <Rings />
       <Boxes />
       <FloatingGrid />
+
+      {/* Хотспоты теперь сами управляют своей видимостью */}
       <Hotspots />
 
       <ambientLight intensity={0.2} />
 
       <spotLight
         color={[1, 0.25, 0.7]}
-        intensity={280}
+        intensity={380}
         angle={0.6}
         penumbra={0.5}
         position={[5, 5, 0]}
@@ -54,7 +56,7 @@ function CarShow({ quality }) {
 
       <spotLight
         color={[0.14, 0.5, 1]}
-        intensity={340}
+        intensity={440}
         angle={0.6}
         penumbra={0.5}
         position={[-5, 5, 0]}
@@ -72,22 +74,29 @@ export default function App() {
 
   return (
     <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
-      {/* МЕНЮ НАСТРОЕК ГРАФИКИ */}
+      {/* В левом верхнем углу оставляем ТОЛЬКО чистый ряд кнопок графики */}
       <div className='ui-container'>
-        {["low", "mid", "high"].map((q) => (
-          <button
-            key={q}
-            onClick={() => setQuality(q)}
-            className={`btn-quality ${quality === q ? "active" : ""}`}>
-            {q}
-          </button>
-        ))}
+        <div className='quality-row'>
+          {["low", "mid", "high"].map((q) => (
+            <button
+              key={q}
+              onClick={() => setQuality(q)}
+              className={`btn-quality ${quality === q ? "active" : ""}`}>
+              {q}
+            </button>
+          ))}
+        </div>
       </div>
 
       <MusicPlayer />
 
+      {/* ОБНОВИЛИ FALLBACK: Теперь тут центрированный неоновый экран загрузки */}
       <Suspense
-        fallback={<div style={{ color: "white", padding: "20px" }}>Загрузка текстур...</div>}>
+        fallback={
+          <div className='loader-container'>
+            <div className='loader-text'>Загрузка текстур...</div>
+          </div>
+        }>
         <Canvas
           shadows={quality !== "low"}
           gl={{ legacy: false }}
