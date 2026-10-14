@@ -1,0 +1,89 @@
+/* ==========================================================================
+   СТИЛИ ДЛЯ 3D-ХОТСПОТОВ И ИНФОРМАЦИОННЫХ ПЛАШЕК (_HOTSPOTS.SCSS)
+   ========================================================================= */
+
+/* Общая обертка, которую Drei накладывает на HTML-контейнер поверх Canvas */
+.hotspot-html-wrapper {
+  pointer-events: auto;
+  transition: all 0.3s ease;
+}
+
+/* Круглая кнопка с номером точки (когда плашка закрыта) */
+.btn-hotspot-marker {
+  background: rgba(255, 51, 51, 0.8);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 0 10px #ff3333;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    background: rgba(255, 51, 51, 1);
+  }
+}
+
+/* Красивое неоновое информационное окно (когда плашка открыта) */
+.hotspot-card {
+  width: 200px;
+  background: rgba(15, 15, 25, 0.95) !important; // Глубокий темный фон карточки
+  color: white !important;
+  font-family: sans-serif;
+  padding: 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid #ff3333 !important; // Яркая неоновая рамка
+  box-shadow: 0 0 15px rgba(255, 51, 51, 0.4) !important; // Неоновое свечение вокруг
+  position: relative;
+
+  /* Настройки заголовка внутри карточки */
+  h4 {
+    margin: 0 0 6px 0 !important;
+    color: #ff3333 !important;
+    font-size: 14px !important;
+  }
+
+  /* Настройки описания (текста) внутри карточки */
+  p {
+    margin: 0 !important;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    color: #cccccc !important;
+  }
+
+  /* Мобильная адаптивность под экраны смартфонов и планшетов */
+  @media (max-width: 768px) {
+    width: 260px !important; // Делаем карточку чуть шире на мобильных устройствах
+    padding: 10px !important;
+
+    h4 {
+      font-size: 13px !important;
+    }
+    p {
+      font-size: 11px !important;
+    }
+  }
+}
+
+/* Кнопка-крестик в углу для закрытия карточки */
+.btn-hotspot-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 12px;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #ff3333;
+  }
+}

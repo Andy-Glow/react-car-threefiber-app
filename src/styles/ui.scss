@@ -1,146 +1,13 @@
-.ui-container {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  font-family: sans-serif;
-}
+/* ==========================================================================
+   ГЛАВНЫЙ СВЯЗУЮЩИЙ ФАЙЛ ИНТЕРФЕЙСА (UI.SCSS)
+   ========================================================================== */
 
-.quality-row {
-  display: flex;
-  gap: 10px;
-}
+/* Подключаем изолированные модули стилей. */
+@use "quality";
+@use "music";
+@use "hotspots";
 
-.btn-quality {
-  padding: 8px 16px;
-  background: rgba(15, 15, 25, 0.8);
-  color: white;
-  border: 1px solid #555;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 1px;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: rgba(30, 30, 45, 0.9);
-    border-color: #888;
-  }
-
-  &.active {
-    background: #ff3333;
-    border-color: #ff3333;
-    box-shadow: 0 0 10px #ff3333;
-  }
-}
-
-/* Обновленная кнопка скрытия хотспотов: теперь располагается прямо под графикой */
-.btn-toggle-hotspots {
-  padding: 8px 16px;
-  background: rgba(15, 15, 25, 0.8);
-  color: white;
-  border: 1px solid #555;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.2s ease;
-  width: 100%; // Автоматически растягивается на всю ширину блока графики
-  text-align: center;
-
-  &:hover {
-    border-color: #ff3333;
-    box-shadow: 0 0 8px rgba(255, 51, 51, 0.3);
-  }
-
-  &.hidden-mode {
-    border-color: #ff3333;
-    background: rgba(255, 51, 51, 0.1);
-    box-shadow: 0 0 10px rgba(255, 51, 51, 0.4);
-  }
-}
-
-/* Контейнер музыкального плеера справа */
-.music-container {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 10;
-}
-
-.btn-music {
-  padding: 8px 16px;
-  background: rgba(15, 15, 25, 0.8);
-  color: white;
-  border: 1px solid #ff3333;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 1px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  &:hover {
-    background: rgba(255, 51, 51, 0.1);
-    box-shadow: 0 0 8px rgba(255, 51, 51, 0.4);
-  }
-
-  &.playing {
-    background: rgba(255, 51, 51, 0.2);
-    border-color: #ff3333;
-    box-shadow: 0 0 15px rgba(255, 51, 51, 0.6);
-    text-shadow: 0 0 5px white;
-  }
-}
-
-/* Вертикальный контейнер для плеера и ползунка громкости */
-.music-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: flex-end;
-}
-
-/* Стилизация ползунка громкости */
-.volume-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 120px;
-  height: 4px;
-  background: #333;
-  border-radius: 2px;
-  outline: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #ff3333;
-    box-shadow: 0 0 5px #ff3333;
-    transition: transform 0.1s;
-  }
-
-  &::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-  }
-}
-
-/* Экран загрузки 3D сцены */
+/* СТИЛИ ДЛЯ ЭКРАНА ЗАГРУЗКИ СЦЕНЫ */
 .loader-container {
   position: absolute;
   top: 0;
@@ -151,9 +18,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100; // Поверх абсолютно всего на экране
+  z-index: 100; // Поверх абсолютно всех 3D-объектов и интерфейсов
 }
 
+/* Пульсирующий неоновый текст "Загрузка текстур..." по центру экрана */
 .loader-text {
   color: white;
   font-family: sans-serif;
@@ -161,11 +29,11 @@
   text-transform: uppercase;
   font-size: 14px;
   letter-spacing: 2px;
-  text-shadow: 0 0 10px #ff3333; // Неоновое свечение, как на активных кнопках
-  animation: pulse-loader 1.5s infinite ease-in-out;
+  text-shadow: 0 0 10px #ff3333; // Фирменное красное неоновое свечение
+  animation: pulse-loader 1.5s infinite ease-in-out; // Запуск бесконечного мерцания
 }
 
-/* Эффект плавного мерцания надписи */
+/* Анимация плавного изменения яркости и неонового свечения */
 @keyframes pulse-loader {
   0%,
   100% {

@@ -1,0 +1,100 @@
+/* ==========================================================================
+   СТИЛИ ДЛЯ МЕНЮ УПРАВЛЕНИЯ ГРАФИКОЙ И ХОТСПОТАМИ (Слева вверху)
+   ========================================================================== */
+
+/* Глобальный контейнер всего меню */
+.ui-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column; // Выстраивает строку графики и кнопку точек друг под другом
+  gap: 12px;
+  font-family: sans-serif;
+  width: max-content;
+
+  /* Адаптивность для смартфонов */
+  @media (max-width: 768px) {
+    top: 12px;
+    left: 12px;
+    gap: 8px;
+    width: max-content; // Сужаем контейнер на маленьком экране
+  }
+}
+
+/* Строка, в которой кнопки пресетов стоят в один ряд */
+.quality-row {
+  display: flex;
+  gap: 10px;
+
+  @media (max-width: 768px) {
+    gap: 6px;
+  }
+}
+
+/* Кнопки переключения LOW, MID, HIGH */
+.btn-quality {
+  padding: 8px 16px;
+  background: rgba(15, 15, 25, 0.8); // Полупрозрачный темный фон
+  color: white;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+  transition: all 0.2s ease; // Плавная анимация наведения
+
+  @media (max-width: 768px) {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+
+  &:hover {
+    background: rgba(30, 30, 45, 0.9);
+    border-color: #888;
+  }
+
+  /* Подсветка активного в данный момент режима графики */
+  &.active {
+    background: #ff3333;
+    border-color: #ff3333;
+    box-shadow: 0 0 10px #ff3333; // Неоновое свечение
+  }
+}
+
+/* Кнопка "Скрыть/Показать точки", которая растянута на всю ширину меню */
+.btn-toggle-hotspots {
+  padding: 8px 16px;
+  background: rgba(15, 15, 25, 0.8);
+  color: white;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+
+  &:hover {
+    border-color: #ff3333;
+    box-shadow: 0 0 8px rgba(255, 51, 51, 0.3);
+  }
+
+  /* Стиль кнопки, когда режим скрытия точек активирован */
+  &.hidden-mode {
+    border-color: #ff3333;
+    background: rgba(255, 51, 51, 0.1);
+    box-shadow: 0 0 10px rgba(255, 51, 51, 0.4);
+  }
+}

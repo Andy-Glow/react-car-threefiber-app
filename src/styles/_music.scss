@@ -1,0 +1,100 @@
+/* ==========================================================================
+   СТИЛИ ДЛЯ МУЗЫКАЛЬНОГО ПЛЕЕРА И ГРОМКОСТИ (Справа вверху)
+   ========================================================================== */
+
+/* Главный контейнер плеера, фиксирующий его в правом углу */
+.music-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+
+  /* Мобильная адаптивность: сдвигаем ближе к краю на смартфонах */
+  @media (max-width: 768px) {
+    top: 12px;
+    right: 12px;
+  }
+}
+
+/* Вертикальный столбик, выравнивающий элементы*/
+.music-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+/* Кнопка плеера */
+.btn-music {
+  padding: 8px 16px;
+  background: rgba(15, 15, 25, 0.8);
+  color: white;
+  border: 1px solid #ff3333;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 140px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 6px 10px;
+    font-size: 10px;
+    gap: 6px;
+    width: 120px;
+  }
+
+  &:hover {
+    background: rgba(255, 51, 51, 0.1);
+    box-shadow: 0 0 8px rgba(255, 51, 51, 0.4);
+  }
+
+  /* Стиль кнопки, когда музыка включена */
+  &.playing {
+    background: rgba(255, 51, 51, 0.2);
+    border-color: #ff3333;
+    box-shadow: 0 0 15px rgba(255, 51, 51, 0.6);
+    text-shadow: 0 0 5px white;
+  }
+}
+
+/* Стилизация ползунка громкости (кастомный трек и кругляшок) */
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 120px;
+  height: 4px;
+  background: #333;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 140px;
+
+  @media (max-width: 768px) {
+    width: 120px; // Делаем ползунок короче на телефонах
+  }
+
+  /* Стилизация бегунка (кругляшка) ползунка */
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ff3333;
+    box-shadow: 0 0 5px #ff3333;
+    transition: transform 0.1s;
+  }
+
+  &::-webkit-slider-thumb:hover {
+    transform: scale(1.2); // Слегка увеличиваем кругляшок при наведении
+  }
+}
