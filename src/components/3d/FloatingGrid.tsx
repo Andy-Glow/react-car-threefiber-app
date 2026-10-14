@@ -10,7 +10,7 @@ interface FloatingGridProps {
 export function FloatingGrid({ quality }: FloatingGridProps): React.JSX.Element {
   /* Загружаем картинку сетки из папки public.
      С помощью "as Texture" говорим TypeScript, что это объект 3D-текстуры Three.js. */
-  const diffuse = useLoader(TextureLoader, "/textures/grid-texture.png") as Texture;
+  const diffuse = useLoader(TextureLoader, "textures/grid-texture.png") as Texture;
 
   useEffect(() => {
     if (!diffuse) return;

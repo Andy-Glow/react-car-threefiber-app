@@ -13,7 +13,7 @@ export function MusicPlayer(): React.JSX.Element {
   const toggleMusic = (): void => {
     /* Создаем объект аудио только при первом клике, чтобы не качать файл впустую */
     if (!audioRef.current) {
-      audioRef.current = new Audio("/audio/moon-chrome-auto.mp3");
+      audioRef.current = new Audio("audio/moon-chrome-auto.mp3");
       audioRef.current.loop = true; // Зацикливаем трек
       audioRef.current.volume = volume; // Передаем стартовую громкость
     }

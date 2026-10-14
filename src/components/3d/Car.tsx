@@ -7,7 +7,7 @@ import { GLTF } from "three-stdlib";
 export function Car(): React.JSX.Element | null {
   /* Загружаем 3D-модель машины из папки public. 
      Используем "as unknown as GLTF", чтобы TypeScript понимал внутреннюю структуру этой 3D-сцены. */
-  const gltf = useGLTF("/models/car/scene.gltf") as unknown as GLTF;
+  const gltf = useGLTF("models/car/scene.gltf") as unknown as GLTF;
 
   useEffect(() => {
     if (gltf && gltf.scene) {
@@ -90,4 +90,4 @@ export function Car(): React.JSX.Element | null {
 }
 
 // Vite начинает скачивать модель заранее, до того как построится Canvas
-useGLTF.preload("/models/car/scene.gltf");
+useGLTF.preload("models/car/scene.gltf");

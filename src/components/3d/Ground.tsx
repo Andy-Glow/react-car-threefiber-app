@@ -19,8 +19,8 @@ export function Ground({ resolution, quality }: GroundProps): React.JSX.Element 
   /* Загружаем картинки рельефа (карту нормалей) и шероховатости мокрого асфальта.
      С помощью "as Texture[]" объясняем TypeScript, что на выходе получаем массив готовых 3D-текстур. */
   const [roughness, normal] = useLoader(TextureLoader, [
-    "/textures/terrain-roughness.jpg",
-    "/textures/terrain-normal.jpg",
+    "textures/terrain-roughness.jpg",
+    "textures/terrain-normal.jpg",
   ]) as Texture[];
 
   useEffect(() => {
