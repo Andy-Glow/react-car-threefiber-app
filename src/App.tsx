@@ -63,7 +63,7 @@ const MemoizedCarShow = memo(function CarShow({
           заменяя её легким готовым пресетом ночного неба. Видеокарта вздыхает с облегчением! */}
       {isLow ? (
         <>
-          <Environment preset='night' />
+          <Environment files='/react-car-threefiber-app/hdri/dikhololo_night_1k.hdr' />
           <Car />
         </>
       ) : (
